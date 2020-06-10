@@ -1,0 +1,53 @@
+Esoda Health is a major health care solution provider, with currently having two data centers Los Angeles (10.1.0.0/20) and New York City (10.2.0.0/20). These two data centers currently divided into standard three tier network architecture, and  host 100+ VM’s that supports web applications, API’s and SQL Databases. Each datacenter also has its own firewall and load balancers. Based on current projections there was an increase in traffic in the next year, so company has decided to migrate the data centers in Cloud in two regions (EastUs and WestUs) to support HA, and with peering back to on-premise data centers.  
+
+
+Assuming that Azure subscription and billing setup is done. 
+
+Azure Firewall
+
+Azure Connect:
+We can choose either Virtual Network (Site-to-Site) VPN connectivity  or can use Express Route for Seam less connection. 
+Prefer site to site for App gateways and Express route for Basition subnets.
+
+
+Active Directory:
+Create a custom active directory sync with AAD.
+Password less intgration 
+Active Sync
+
+VNet for both the locations.
+
+CIDR Range Los Angles - 10.1.0.0/20 - 4096 IP's
+CIDR Range New York - 10.2.0.0/20 - 4096 IP's
+Azure Vnet details - East US Needs 4096 IP's
+"10.1.16.0/21", "10.1.24.0/22", "10.1.28.0/23", "10.1.30.0/24"
+
+reserve from 10.1.16.0 - 10.1.30.255 - 4096 Ip's
+
+Azure Vnet details - West US Needs 4096 IP's
+"10.2.16.0/21","10.2.24.0/22","10.2.28.0/23","10.2.30.0/24"
+
+reserve from 10.2.16.0 - 10.2.30.255 - 4096 Ip's
+
+Divide the Vnet into following subnets (Each subnet will have corresponding NSG)
+Gateway (Application Gateway, 
+VM’s (VM's, AKS and Swarm clusters)
+Backend Services (SQL, Key Vault, App Insights, Storage, Monitor and container registries). 
+Business Logic Subnet (Function Apps, Logic Apps, Event Grid Topics)
+Basition Subnet (Add bunch of VM's that connects internally to On Premise for Connection)
+
+
+Create Public IP and attach to a public load balancer and route it through Azure fire wall.
+Setup the Firewall rules.
+
+
+Migrating Data center to cloud can be done in multiple ways. VM Ware and Hperv Environments are have a simpler option to do a Migration Assessment.
+
+Rehost with lift and shift is a easier option with less code changes and  faster migrations. once we migrated from On-prem to Azure we can slowly start rebuild or rearchitecting the apps to above Plan while staying in the same networks.
+
+ASR can be used as a Disastor recovery or failover and currently does not support to Azure Stack as a target for fail over.
+
+
+
+
+
